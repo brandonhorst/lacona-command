@@ -1,0 +1,36 @@
+{
+  "name": "lacona-command",
+  "version": "0.0.1",
+  "description": "Base Lacona Command which all Commands must extend",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "babel --stage 0 src --out-dir lib",
+    "clean": "rimraf lib",
+    "prepublish": "npm run clean && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/brandonhorst/lacona-command.git"
+  },
+  "keywords": [
+    "lacona",
+    "app",
+    "application",
+    "launch"
+  ],
+  "author": "@brandonhorst",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/brandonhorst/lacona-command/issues"
+  },
+  "homepage": "https://github.com/brandonhorst/lacona-command",
+  "devDependencies": {
+    "babel": "^5.8.23",
+    "lacona": "^0.35.0",
+    "rimraf": "^2.4.3"
+  },
+  "dependencies": {
+    "lacona-phrase": "^0.9.1",
+    "moment": "^2.11.0"
+  }
+}
