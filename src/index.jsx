@@ -1,16 +1,19 @@
 /** @jsx createElement */
 
 import moment from 'moment'
-import { Phrase, createElement } from 'lacona-phrase'
-import { TimeDuration } from 'lacona-phrase-datetime'
+import { createElement } from 'elliptical'
+import { TimeDuration } from 'elliptical-datetime'
 
-export class Command extends Phrase {
+export const Command = {
+  mapResult (result, element) {
+    return {result, element}
+  },
   describe () {
     return null
   }
 }
 
-export class BooleanSetting extends Phrase {
+export const BooleanSetting = {
   describe () {
     return null
   }
@@ -78,27 +81,27 @@ class BooleanSettingCommandObject {
   }
 }
 
-export class BooleanSettingCommand extends Phrase {
-  static extends = [Command]
-
+export const BooleanSettingCommand = {
+  extends: [Command],
+  mapResult (result) {
+    return new BooleanSettingCommandObject(result)
+  },
   describe () {
     return (
-      <map function={result => new BooleanSettingCommandObject(result)}>
-        <sequence>
-          <list items={[
-            {text: 'disable ', value: 'disable'},
-            {text: 'enable ', value: 'enable'},
-            {text: 'toggle ', value: 'toggle'},
-            {text: 'turn off ', value: 'disable'},
-            {text: 'turn on ', value: 'enable'}
-          ]} limit={3} category='action' id='verb' />
-          <BooleanSetting id='setting' />
-          <sequence optional id='duration'>
-            <literal text=' for ' category='conjunction' />
-            <TimeDuration merge />
-          </sequence>
+      <sequence>
+        <list items={[
+          {text: 'disable ', value: 'disable'},
+          {text: 'enable ', value: 'enable'},
+          {text: 'toggle ', value: 'toggle'},
+          {text: 'turn off ', value: 'disable'},
+          {text: 'turn on ', value: 'enable'}
+        ]} limit={3} category='action' id='verb' />
+        <BooleanSetting id='setting' />
+        <sequence optional id='duration'>
+          <literal text=' for ' category='conjunction' />
+          <TimeDuration merge />
         </sequence>
-      </map>
+      </sequence>
     )
   }
 }
