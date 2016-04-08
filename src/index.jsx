@@ -1,5 +1,6 @@
 /** @jsx createElement */
 
+import demoExecute from './demo'
 import moment from 'moment'
 import { createElement } from 'elliptical'
 import { TimeDuration } from 'elliptical-datetime'
@@ -19,73 +20,30 @@ export const BooleanSetting = {
   }
 }
 
-function formatDuration ({hours, minutes, seconds}) {
-  let text
-  if (hours && minutes && seconds) {
-    text = `${hours} hours, ${minutes} minutes, and ${seconds} seconds`
-  } else if (hours && minutes) {
-    text = `${hours} hours and ${minutes} minutes`
-  } else if (hours && seconds) {
-    text = `${hours} hours and ${seconds} seconds`
-  } else if (minutes && seconds) {
-    text = `${minutes} minutes and ${seconds} seconds`
-  } else if (hours) {
-    text = `${hours} hours`
-  } else if (minutes) {
-    text = `${minutes} minutes`
-  } else if (seconds) {
-    text = `${seconds} seconds`
-  }
-
-  return {text, argument: 'time duration'}
-}
-
-class BooleanSettingCommandObject {
-  constructor ({verb, setting, duration}) {
-    this.verb = verb
-    this.setting = setting
-    this.duration = duration
-  }
-
-  setSetting (invert = false) {
-    if (this.verb === 'enable' || this.verb === 'disable' && invert) {
-      this.setting.enable()
-    } else if (this.verb === 'disable' || this.verb === 'enable' && invert) {
-      this.setting.disable()
-    } else if (this.verb === 'toggle') {
-      this.setting.toggle()
-    }
-  }
-
-  _demoExecute () {
-    const result = [
-      {text: this.verb, category: 'action'},
-      {text: ' '},
-      {text: this.setting.name, argument: 'setting'}
-    ]
-
-    if (this.duration) {
-      result.push({text: ', wait '}, formatDuration(this.duration), {text: ', then change it back'})
-    }
-
-    return result
-  }
-
-  execute () {
-    if (this.duration) {
-      const ms = moment.duration(this.duration).asMilliseconds()
-      global.setTimeout(this.setSetting.bind(this, true), ms)
-    }
-    
-    this.setSetting()
+function setSetting (result, invert = false) {
+  if (result.verb === 'enable' || result.verb === 'disable' && invert) {
+    result.setting.enable()
+  } else if (result.verb === 'disable' || result.verb === 'enable' && invert) {
+    result.setting.disable()
+  } else if (result.verb === 'toggle') {
+    result.setting.toggle()
   }
 }
 
 export const BooleanSettingCommand = {
   extends: [Command],
-  mapResult (result) {
-    return new BooleanSettingCommandObject(result)
+
+  demoExecute,
+
+  execute (result) {
+    if (result.duration) {
+      const ms = moment.duration(result.duration).asMilliseconds()
+      global.setTimeout(() => setSetting(result, true), ms)
+    }
+    
+    setSetting(result)
   },
+
   describe () {
     return (
       <sequence>
