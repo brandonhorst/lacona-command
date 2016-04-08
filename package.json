@@ -35,8 +35,8 @@
     "rimraf": "^2.5.2"
   },
   "dependencies": {
-    "elliptical": "^1.0.0-rc9",
-    "elliptical-datetime": "^1.0.0-rc1",
+    "elliptical": "^1.0.0-rc10",
+    "elliptical-datetime": "^1.0.0-rc3",
     "moment": "^2.12.0"
   },
   "directories": {
