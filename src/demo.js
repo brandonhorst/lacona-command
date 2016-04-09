@@ -20,16 +20,16 @@ function formatDuration ({hours, minutes, seconds}) {
   return {text, argument: 'time duration'}
 }
 
-export default function _demoExecute () {
-  const result = [
-    {text: this.verb, category: 'action'},
+export default function demoExecute (result) {
+  const output = [
+    {text: result.verb, category: 'action'},
     {text: ' '},
-    {text: this.setting.name, argument: 'setting'}
+    {text: result.setting.name, argument: 'setting'}
   ]
 
-  if (this.duration) {
-    result.push({text: ', wait '}, formatDuration(this.duration), {text: ', then change it back'})
+  if (result.duration) {
+    output.push({text: ', wait '}, formatDuration(result.duration), {text: ', then change it back'})
   }
 
-  return result
+  return output
 }
