@@ -1,6 +1,6 @@
 {
   "name": "lacona-command",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Base Lacona Command which all Commands must extend",
   "main": "lib/index.js",
   "scripts": {
