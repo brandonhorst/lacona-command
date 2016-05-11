@@ -32,6 +32,8 @@ node_modules
 .lock-wscript
 
 lib
+lib-es
+lib-cjs
 tmp
 
 # Optional npm cache directory
