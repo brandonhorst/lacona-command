@@ -6,6 +6,7 @@ import { createElement } from 'elliptical'
 import { TimeDuration } from 'elliptical-datetime'
 
 export const Command = {
+  id: 'lacona-command:Command',
   mapResult (result, element) {
     return {result, element}
   },
@@ -15,6 +16,7 @@ export const Command = {
 }
 
 export const BooleanSetting = {
+  id: 'lacona-command:BooleanSetting',
   describe () {
     return null
   }
@@ -30,7 +32,7 @@ function setSetting (result, invert = false) {
   }
 }
 
-export const BooleanSettingCommand = {
+const BooleanSettingCommand = {
   extends: [Command],
 
   demoExecute,
