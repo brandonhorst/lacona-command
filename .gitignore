@@ -31,10 +31,8 @@ node_modules
 # Users Environment Variables
 .lock-wscript
 
+build
 lib
-lib-es
-lib-cjs
-tmp
 
 # Optional npm cache directory
 .npm

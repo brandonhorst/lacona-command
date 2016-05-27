@@ -2,25 +2,10 @@
 
 import demoExecute from './demo'
 import moment from 'moment'
-import { createElement } from 'elliptical'
-import { TimeDuration } from 'elliptical-datetime'
 
-export const Command = {
-  id: 'lacona-command:Command',
-  mapResult (result, element) {
-    return {result, element}
-  },
-  describe () {
-    return null
-  }
-}
-
-export const BooleanSetting = {
-  id: 'lacona-command:BooleanSetting',
-  describe () {
-    return null
-  }
-}
+import {createElement} from 'elliptical'
+import {Command, BooleanSetting, TimeDuration} from 'lacona-phrases'
+import {setTimeout} from 'lacona-api'
 
 function setSetting (result, invert = false) {
   if (result.verb === 'enable' || result.verb === 'disable' && invert) {
@@ -40,7 +25,7 @@ const BooleanSettingCommand = {
   execute (result) {
     if (result.duration) {
       const ms = moment.duration(result.duration).asMilliseconds()
-      global.setTimeout(() => setSetting(result, true), ms)
+      setTimeout(() => setSetting(result, true), ms)
     }
     
     setSetting(result)
@@ -66,4 +51,4 @@ const BooleanSettingCommand = {
   }
 }
 
-export const extensions = [BooleanSettingCommand]
+export default [BooleanSettingCommand]
