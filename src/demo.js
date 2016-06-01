@@ -48,7 +48,6 @@ export default function demoExecute (result) {
     {text: ' '},
     andify(settings)
   ])
-  console.log(output)
 
   if (result.duration) {
     output.push({text: ', wait '}, formatDuration(result.duration), {text: ', then change it back'})
