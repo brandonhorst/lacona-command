@@ -9,11 +9,11 @@ import {setTimeout} from 'lacona-api'
 
 function setSetting (result, invert = false) {
   if (result.verb === 'enable' || result.verb === 'disable' && invert) {
-    result.setting.enable()
+    result.settings.forEach((setting) => setting.enable())
   } else if (result.verb === 'disable' || result.verb === 'enable' && invert) {
-    result.setting.disable()
+    result.settings.forEach((setting) => setting.disable())
   } else if (result.verb === 'toggle') {
-    result.setting.toggle()
+    result.settings.forEach((setting) => setting.toggle())
   }
 }
 
@@ -41,7 +41,9 @@ const BooleanSettingCommand = {
           {text: 'turn off ', value: 'disable'},
           {text: 'turn on ', value: 'enable'}
         ]} limit={3} category='action' id='verb' />
-        <BooleanSetting id='setting' />
+        <repeat id='settings' unique separator={<list items={[' and ', ', and ', ', ']} limit={1} category='conjunction' />} ellipsis>
+          <BooleanSetting suppressEmpty={false} />
+        </repeat>
         <sequence optional id='duration'>
           <literal text=' for ' category='conjunction' />
           <TimeDuration merge />

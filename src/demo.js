@@ -1,3 +1,21 @@
+import _ from 'lodash'
+
+function andify (array, separator = ', ') {
+  if (array.length === 1) {
+    return array
+  } else if (array.length === 2) {
+    return [array[0], {text: ' and '}, array[1]]
+  } else {
+    return _.chain(array)
+      .slice(0, -2)
+      .map(item => [item, {text: separator}])
+      .flatten()
+      .concat(_.slice(array, -2, -1)[0])
+      .concat({text: `${separator}and `})
+      .concat(_.slice(array, -1)[0])
+      .value()
+  }
+}
 
 function formatDuration ({hours, minutes, seconds}) {
   let text
@@ -21,11 +39,16 @@ function formatDuration ({hours, minutes, seconds}) {
 }
 
 export default function demoExecute (result) {
-  const output = [
+  const settings = result.settings.map(setting => {
+    return {text: setting.name, argument: 'setting'}
+  })
+
+  const output = _.flatten([
     {text: result.verb, category: 'action'},
     {text: ' '},
-    {text: result.setting.name, argument: 'setting'}
-  ]
+    andify(settings)
+  ])
+  console.log(output)
 
   if (result.duration) {
     output.push({text: ', wait '}, formatDuration(result.duration), {text: ', then change it back'})

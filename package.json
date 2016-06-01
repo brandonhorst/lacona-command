@@ -38,6 +38,7 @@
     "rimraf": "^2.5.2"
   },
   "dependencies": {
+    "lodash": "^4.13.1",
     "moment": "^2.13.0"
   },
   "directories": {
