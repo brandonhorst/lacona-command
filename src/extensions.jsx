@@ -5,7 +5,6 @@ import moment from 'moment'
 
 import {createElement} from 'elliptical'
 import {Command, BooleanSetting, TimeDuration} from 'lacona-phrases'
-import {setTimeout} from 'lacona-api'
 
 function setSetting (result, invert = false) {
   if (result.verb === 'enable' || result.verb === 'disable' && invert) {
