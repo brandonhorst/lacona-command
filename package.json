@@ -1,6 +1,6 @@
 {
   "name": "lacona-command",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "Alternative commands for Lacona",
   "scripts": {
     "build": "babel src --out-dir lib",
