@@ -4,16 +4,28 @@ import demoExecute from './demo'
 import moment from 'moment'
 
 import {createElement} from 'elliptical'
-import {Command, BooleanSetting, TimeDuration} from 'lacona-phrases'
+import {Command, BooleanSetting, BooleanCommand, TimeDuration} from 'lacona-phrases'
 
 function setSetting (result, invert = false) {
   if (result.verb === 'enable' || result.verb === 'disable' && invert) {
-    result.settings.forEach((setting) => setting.enable())
+    result.settings.forEach(({element, result}) => {
+      element.type.setSetting(result == null ? true : result)
+    })
   } else if (result.verb === 'disable' || result.verb === 'enable' && invert) {
-    result.settings.forEach((setting) => setting.disable())
+    result.settings.forEach(({element, result}) => {
+      element.type.setSetting(result == null ? false : !result)
+    })
   } else if (result.verb === 'toggle') {
-    result.settings.forEach((setting) => setting.toggle())
+    result.settings.forEach(({element}) => {
+      Promise.resolve(element.type.getSetting()).then(enabled => {
+        element.type.setSetting(!enabled)
+      })
+    })
   }
+}
+
+function doCommand (result, value) {
+  result.command.element.type.execute(value)
 }
 
 const BooleanSettingCommand = {
@@ -43,7 +55,7 @@ const BooleanSettingCommand = {
         <repeat id='settings' unique separator={<list items={[' and ', ', and ', ', ']} limit={1} category='conjunction' />} ellipsis>
           <BooleanSetting suppressEmpty={false} />
         </repeat>
-        <sequence optional id='duration'>
+        <sequence id='duration'>
           <literal text=' for ' category='conjunction' />
           <TimeDuration merge />
         </sequence>
@@ -52,4 +64,32 @@ const BooleanSettingCommand = {
   }
 }
 
-export default [BooleanSettingCommand]
+
+const BooleanCommandCommand = {
+  extends: [Command],
+
+  demoExecute,
+
+  execute (result) {
+    if (result.duration) {
+      const ms = moment.duration(result.duration).asMilliseconds()
+      setTimeout(() => doCommand(result, result.command.result == null ? false : !result.command.result), ms)
+    }
+    
+    doCommand(result, result.command.result == null ? true : result.command.result)
+  },
+
+  describe () {
+    return (
+      <sequence>
+        <BooleanCommand id='command' suppressEmpty={false} ellipsis />
+        <sequence id='duration'>
+          <literal text=' for ' />
+          <TimeDuration merge />
+        </sequence>
+      </sequence>
+    )
+  }
+}
+
+export default [BooleanSettingCommand, BooleanCommandCommand]
